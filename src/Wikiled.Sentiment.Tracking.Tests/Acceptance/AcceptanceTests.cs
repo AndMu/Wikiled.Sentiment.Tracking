@@ -3,7 +3,6 @@ using System.IO;
 using Autofac;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-using Wikiled.Common.Utilities.Helpers;
 using Wikiled.Common.Utilities.Modules;
 using Wikiled.Sentiment.Tracking.Logic;
 using Wikiled.Sentiment.Tracking.Modules;
@@ -18,7 +17,7 @@ namespace Wikiled.Sentiment.Tracking.Tests.Acceptance
         [SetUp]
         public void Setup()
         {
-            var file = Path.Combine(TestContext.CurrentContext.TestDirectory, "result.csv");
+            var file = Path.Combine(TestContext.CurrentContext.TestDirectory, "Test", "result.csv");
             if (File.Exists(file))
             {
                 File.Delete(file);
