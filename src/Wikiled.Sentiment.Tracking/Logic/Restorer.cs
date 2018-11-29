@@ -24,8 +24,16 @@ namespace Wikiled.Sentiment.Tracking.Logic
                 throw new ArgumentNullException(nameof(file));
             }
 
+            logger.LogInformation("Load: {0}", file);
+
             var mask = Path.GetFileNameWithoutExtension(file);
             var directory = Path.GetDirectoryName(file);
+            if (!Directory.Exists(directory))
+            {
+                logger.LogWarning("Directory does not exist: {0}", file);
+                return;
+            }
+
             var files = Directory.GetFiles(directory, $"{mask}.*");
             DateTime cutoff = DateTime.UtcNow.AddDays(-10);
             foreach (var currentFile in files)
