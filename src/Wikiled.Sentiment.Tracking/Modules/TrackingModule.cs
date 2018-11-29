@@ -18,19 +18,23 @@ namespace Wikiled.Sentiment.Tracking.Modules
             builder.RegisterType<Tracker>().As<ITracker>();
             builder.RegisterType<ExpireTracking>().As<ITrackingRegister>().SingleInstance();
             builder.RegisterType<TrackingStream>().As<ITrackingRegister>().As<IRatingStream>().SingleInstance();
-
-            builder.RegisterType<PersistencyTracking>().SingleInstance();
-            builder.RegisterType<TrackingManager>().As<ITrackingManager>().SingleInstance();
+            
             builder.RegisterType<TrackerFactory>().As<ITrackerFactory>().SingleInstance();
+
+            builder.RegisterType<TrackingManager>().As<ITrackingManager>().SingleInstance();
             builder.RegisterInstance(configuration);
 
-            if (configuration.Restore)
+            if (!string.IsNullOrEmpty(configuration.Persistency))
             {
-                builder.RegisterType<Restorer>().As<IRestorer>();
-            }
-            else
-            {
-                builder.RegisterType<NullRestorer>().As<IRestorer>();
+                builder.RegisterType<PersistencyTracking>().SingleInstance().AsSelf().AutoActivate();
+                if (configuration.Restore)
+                {
+                    builder.RegisterType<Restorer>().As<IRestorer>();
+                }
+                else
+                {
+                    builder.RegisterType<NullRestorer>().As<IRestorer>();
+                }
             }
         }
     }

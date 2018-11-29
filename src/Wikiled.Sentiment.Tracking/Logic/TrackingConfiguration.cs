@@ -8,7 +8,7 @@ namespace Wikiled.Sentiment.Tracking.Logic
         {
             ScanTime = scanTime;
             Expire = expire;
-            Persistency = persistency ?? throw new ArgumentNullException(nameof(persistency));
+            Persistency = persistency;
         }
 
         public TimeSpan ScanTime { get; }

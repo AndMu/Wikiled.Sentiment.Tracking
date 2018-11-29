@@ -18,9 +18,13 @@ namespace Wikiled.Sentiment.Tracking.Tests.Acceptance
         [SetUp]
         public void Setup()
         {
-            config = new TrackingConfiguration(TimeSpan.FromMinutes(1),
-                                               TimeSpan.FromDays(2),
-                                               Path.Combine(TestContext.CurrentContext.TestDirectory, "result.csv"));
+            var file = Path.Combine(TestContext.CurrentContext.TestDirectory, "result.csv");
+            if (File.Exists(file))
+            {
+                File.Delete(file);
+            }
+
+            config = new TrackingConfiguration(TimeSpan.FromMinutes(1), TimeSpan.FromDays(2), file);
             config.Restore = true;
         }
 
@@ -31,7 +35,7 @@ namespace Wikiled.Sentiment.Tracking.Tests.Acceptance
             {
                 var manager = container.Resolve<ITrackingManager>();
                 manager.Resolve("Test", "Type1").AddRating(new RatingRecord("1", DateTime.Now, 2));
-                manager.Resolve("Test", "Type1").AddRating(new RatingRecord("1", DateTime.Now, null));
+                manager.Resolve("Test", "Type1").AddRating(new RatingRecord("2", DateTime.Now, null));
                 manager.Resolve("Test", "Type2").AddRating(new RatingRecord("1", DateTime.Now, 2));
             }
 

@@ -25,16 +25,11 @@ namespace Wikiled.Sentiment.Tracking.Logic
             }
 
             var mask = Path.GetFileNameWithoutExtension(file);
-            var directory = Path.GetFileName(file);
+            var directory = Path.GetDirectoryName(file);
             var files = Directory.GetFiles(directory, $"{mask}.*");
             foreach (var currentFile in files)
             {
                 LoadSingleFile(currentFile);
-            }
-
-            if (!File.Exists(file))
-            {
-                logger.LogInformation("File {0} not found", file);
             }
         }
 
