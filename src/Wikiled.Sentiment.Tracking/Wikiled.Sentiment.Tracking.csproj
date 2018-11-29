@@ -11,8 +11,6 @@
     <Description>Wikiled Sentiment tracking</Description>
     <tags>data-mining</tags>
     <projectUrl>https://github.com/AndMu/Wikiled.Sentiment.Tracking</projectUrl>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeP2PAssets</TargetsForTfmSpecificBuildOutput>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
