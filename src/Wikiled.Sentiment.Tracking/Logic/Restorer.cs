@@ -27,9 +27,23 @@ namespace Wikiled.Sentiment.Tracking.Logic
             var mask = Path.GetFileNameWithoutExtension(file);
             var directory = Path.GetDirectoryName(file);
             var files = Directory.GetFiles(directory, $"{mask}.*");
+            DateTime cutoff = DateTime.UtcNow.AddDays(-10);
             foreach (var currentFile in files)
             {
-                LoadSingleFile(currentFile);
+                var info = new FileInfo(currentFile);
+                if (info.CreationTime < cutoff)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    LoadSingleFile(currentFile);
+                }
+                catch (Exception e)
+                {
+                    logger.LogError("Failed to load file " + file, e);
+                }
             }
         }
 
