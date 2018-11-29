@@ -36,6 +36,7 @@ namespace Wikiled.Sentiment.Tracking.Logic
 
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             logger.LogInformation("Creating persistency {0}", configuration.Persistency);
+            configuration.Persistency.EnsureDirectoryExistence();
             restorer.Load(configuration.Persistency);
             var subscription = stream.Stream.Subscribe(item => Process(item.Item1, item.Item2));
             disposable.Add(subscription);
