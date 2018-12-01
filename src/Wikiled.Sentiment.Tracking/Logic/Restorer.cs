@@ -39,7 +39,8 @@ namespace Wikiled.Sentiment.Tracking.Logic
             foreach (var currentFile in files)
             {
                 var info = new FileInfo(currentFile);
-                if (info.CreationTime < cutoff)
+                if (info.CreationTime < cutoff ||
+                    info.Length <= 0)
                 {
                     continue;
                 }
@@ -50,7 +51,7 @@ namespace Wikiled.Sentiment.Tracking.Logic
                 }
                 catch (Exception e)
                 {
-                    logger.LogError("Failed to load file " + file, e);
+                    logger.LogError(e, "Failed to load file " + file);
                 }
             }
         }
