@@ -25,7 +25,6 @@ namespace Wikiled.Sentiment.Tracking.Logic
             }
 
             logger.LogInformation("Load: {0}", file);
-
             var mask = Path.GetFileNameWithoutExtension(file);
             var directory = Path.GetDirectoryName(file);
             if (!Directory.Exists(directory))
