@@ -1,12 +1,12 @@
+using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
-using System;
 using Wikiled.Sentiment.Tracking.Logic;
 
-namespace Wikiled.MachineLearning.Tests.Mathematics.Tracking
+namespace Wikiled.Sentiment.Tracking.Tests.Logic
 {
     [TestFixture]
     public class ExpireTrackingTests

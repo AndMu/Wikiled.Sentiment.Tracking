@@ -7,7 +7,7 @@ using Moq;
 using NUnit.Framework;
 using Wikiled.Sentiment.Tracking.Logic;
 
-namespace Wikiled.MachineLearning.Tests.Mathematics.Tracking
+namespace Wikiled.Sentiment.Tracking.Tests.Logic
 {
     [TestFixture]
     public class PersistencyTrackingTests
