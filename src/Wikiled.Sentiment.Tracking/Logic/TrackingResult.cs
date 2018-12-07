@@ -6,6 +6,8 @@
 
         public int TotalMessages { get; set; }
 
+        public int TotalWithSentiment { get; set; }
+
         public int Hours { get; set; }
 
         public override string ToString()
