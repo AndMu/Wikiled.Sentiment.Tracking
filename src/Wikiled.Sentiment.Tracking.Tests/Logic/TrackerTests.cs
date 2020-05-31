@@ -41,7 +41,7 @@ namespace Wikiled.Sentiment.Tracking.Tests.Logic
         {
             ITestableObserver<RatingRecord> observer = scheduler.CreateObserver<RatingRecord>();
             instance.Ratings.Subscribe(observer);
-            instance.AddRating(new RatingRecord("1", new DateTime(2016, 01, 10), 10));
+            instance.AddRating(new RatingRecord { Id = "1", Date = new DateTime(2016, 01, 10), Rating = 10 });
             scheduler.AdvanceBy(100);
             instance.Dispose();
             observer.Messages.AssertEqual(
@@ -54,8 +54,8 @@ namespace Wikiled.Sentiment.Tracking.Tests.Logic
         {
             double? result = instance.CalculateAverageRating();
             Assert.IsNull(result);
-            instance.AddRating(new RatingRecord("1", new DateTime(2016, 01, 10), 10));
-            instance.AddRating(new RatingRecord("2", new DateTime(2016, 01, 10), 10));
+            instance.AddRating(new RatingRecord { Id = "1", Date = new DateTime(2016, 01, 10), Rating = 10 });
+            instance.AddRating(new RatingRecord { Id = "2", Date = new DateTime(2016, 01, 10), Rating = 10 });
 
             mockApplicationConfiguration.Setup(item => item.Now).Returns(new DateTime(2016, 01, 11));
             Assert.AreEqual(0, instance.Count());
@@ -70,9 +70,9 @@ namespace Wikiled.Sentiment.Tracking.Tests.Logic
         public void AddSameId()
         {
             Assert.IsFalse(instance.IsTracked("1"));
-            instance.AddRating(new RatingRecord("1", new DateTime(2016, 01, 10), 10));
+            instance.AddRating(new RatingRecord { Id = "1", Date = new DateTime(2016, 01, 10), Rating = 10 });
             Assert.IsTrue(instance.IsTracked("1"));
-            instance.AddRating(new RatingRecord("1", new DateTime(2016, 01, 10), 10));
+            instance.AddRating(new RatingRecord { Id = "1", Date = new DateTime(2016, 01, 10), Rating = 10 });
             double? result = instance.CalculateAverageRating();
             Assert.AreEqual(1, instance.Count());
             Assert.AreEqual(10, result);
@@ -83,14 +83,14 @@ namespace Wikiled.Sentiment.Tracking.Tests.Logic
         {
             double? result = instance.CalculateAverageRating();
             Assert.IsNull(result);
-            instance.AddRating(new RatingRecord("1", new DateTime(2016, 01, 10), 10));
-            instance.AddRating(new RatingRecord("2", new DateTime(2016, 01, 10), null));
+            instance.AddRating(new RatingRecord { Id = "1", Date = new DateTime(2016, 01, 10), Rating = 10 });
+            instance.AddRating(new RatingRecord { Id = "2", Date = new DateTime(2016, 01, 10) });
             result = instance.CalculateAverageRating();
             Assert.AreEqual(1, instance.Count());
             Assert.AreEqual(2, instance.Count(false));
             Assert.AreEqual(10, result);
 
-            instance.AddRating(new RatingRecord("3", new DateTime(2016, 01, 11), -10));
+            instance.AddRating(new RatingRecord { Id = "3", Date = new DateTime(2016, 01, 11), Rating = -10 });
             result = instance.CalculateAverageRating();
             var ratings = instance.GetRatings();
             Assert.AreEqual(2, ratings.Length);

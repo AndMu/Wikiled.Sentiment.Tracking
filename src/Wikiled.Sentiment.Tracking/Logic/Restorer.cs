@@ -72,7 +72,7 @@ namespace Wikiled.Sentiment.Tracking.Logic
                     var id = csvData.GetField<string>("Id");
                     var rating = csvData.GetField<double?>("Rating");
                     var tracker = manager.Resolve(tag, type);
-                    tracker.AddRating(new RatingRecord(id, date, rating));
+                    tracker.AddRating(new RatingRecord { Date = date, Id = id, Rating = rating });
                 }
             }
         }

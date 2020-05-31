@@ -36,7 +36,7 @@ namespace Wikiled.Sentiment.Tracking.Tests.Logic
             mockRatingStream = new Mock<IRatingStream>();
             var tracker = new Mock<ITracker>();
             var stream = scheduler.CreateHotObservable(
-                new Recorded<Notification<(ITracker Tracker, RatingRecord Rating)>>(100, Notification.CreateOnNext((tracker.Object, new RatingRecord("1", DateTime.Now, 2)))));
+                new Recorded<Notification<(ITracker Tracker, RatingRecord Rating)>>(100, Notification.CreateOnNext((tracker.Object, new RatingRecord { Id = "1", Date = DateTime.Now, Rating = 2 }))));
             mockRatingStream.Setup(item => item.Stream).Returns(stream);
             instance = CreateTrackingPersistency();
         }
@@ -47,7 +47,7 @@ namespace Wikiled.Sentiment.Tracking.Tests.Logic
             instance.Dispose();
         }
 
-       [Test]
+        [Test]
         public void Construct()
         {
             Assert.Throws<ArgumentNullException>(() => new PersistencyTracking(new NullLogger<PersistencyTracking>(), null, mockRatingStream.Object, mockRestorer.Object));

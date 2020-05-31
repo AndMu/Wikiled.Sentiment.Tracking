@@ -35,9 +35,9 @@ namespace Wikiled.Sentiment.Tracking.Tests.Acceptance
             {
                 container.GetRequiredService<IHostedService>();
                 var manager = container.GetRequiredService<ITrackingManager>();
-                manager.Resolve("Test", "Type1").AddRating(new RatingRecord("1", DateTime.Now, 2));
-                manager.Resolve("Test", "Type1").AddRating(new RatingRecord("2", DateTime.Now, null));
-                manager.Resolve("Test", "Type2").AddRating(new RatingRecord("1", DateTime.Now, 2));
+                manager.Resolve("Test", "Type1").AddRating(new RatingRecord { Id = "1", Date = DateTime.Now, Rating = 2 });
+                manager.Resolve("Test", "Type1").AddRating(new RatingRecord { Id = "2", Date = DateTime.Now});
+                manager.Resolve("Test", "Type2").AddRating(new RatingRecord { Id = "1", Date = DateTime.Now, Rating = 2 });
             }
 
             using (var container = Create().BuildServiceProvider())
