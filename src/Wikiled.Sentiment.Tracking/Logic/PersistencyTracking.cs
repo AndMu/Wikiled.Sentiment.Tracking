@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Reactive.Disposables;
+using System.Threading;
+using System.Threading.Tasks;
 using CsvHelper;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Wikiled.Common.Extensions;
 
 namespace Wikiled.Sentiment.Tracking.Logic
 {
-    public class PersistencyTracking : IDisposable
+    public class PersistencyTracking : IDisposable, IHostedService
     {
         private readonly CompositeDisposable disposable = new CompositeDisposable();
 
@@ -43,7 +47,7 @@ namespace Wikiled.Sentiment.Tracking.Logic
             configuration.Persistency.Backup();
             streamWriter = new StreamWriter(configuration.Persistency, false);
             disposable.Add(streamWriter);
-            writer = new CsvWriter(streamWriter);
+            writer = new CsvWriter(streamWriter, CultureInfo.CurrentCulture);
             disposable.Add(writer);
             writer.WriteField("Date");
             writer.WriteField("Tag");
@@ -71,6 +75,16 @@ namespace Wikiled.Sentiment.Tracking.Logic
         public void Dispose()
         {
             disposable?.Dispose();
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
     }
 }

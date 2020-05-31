@@ -1,10 +1,11 @@
 ﻿using System;
-using Autofac;
+using Microsoft.Extensions.DependencyInjection;
+using Wikiled.Common.Utilities.Modules;
 using Wikiled.Sentiment.Tracking.Logic;
 
 namespace Wikiled.Sentiment.Tracking.Modules
 {
-    public class TrackingModule : Module
+    public class TrackingModule : IModule
     {
         private readonly TrackingConfiguration configuration;
 
@@ -13,29 +14,30 @@ namespace Wikiled.Sentiment.Tracking.Modules
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        protected override void Load(ContainerBuilder builder)
+        public IServiceCollection ConfigureServices(IServiceCollection services)
         {
-            builder.RegisterType<Tracker>().As<ITracker>();
-            builder.RegisterType<ExpireTracking>().As<ITrackingRegister>().SingleInstance();
-            builder.RegisterType<TrackingStream>().As<ITrackingRegister>().As<IRatingStream>().SingleInstance();
-            
-            builder.RegisterType<TrackerFactory>().As<ITrackerFactory>().SingleInstance();
+            services.AddTransient<ITracker, Tracker>();
+            services.AddSingleton<ITrackingRegister, ExpireTracking>();
+            services.AddSingleton<TrackingStream>().As<ITrackingRegister, TrackingStream>().As<IRatingStream, TrackingStream>();
 
-            builder.RegisterType<TrackingManager>().As<ITrackingManager>().SingleInstance();
-            builder.RegisterInstance(configuration);
+            services.AddSingleton<ITrackerFactory, TrackerFactory>();
+            services.AddSingleton<ITrackingManager, TrackingManager>();
+            services.AddSingleton(configuration); 
 
             if (!string.IsNullOrEmpty(configuration.Persistency))
             {
-                builder.RegisterType<PersistencyTracking>().SingleInstance().AsSelf().AutoActivate();
+                services.AddHostedService<PersistencyTracking>();
                 if (configuration.Restore)
                 {
-                    builder.RegisterType<Restorer>().As<IRestorer>();
+                    services.AddTransient<IRestorer, Restorer>();
                 }
                 else
                 {
-                    builder.RegisterType<NullRestorer>().As<IRestorer>();
+                    services.AddTransient<IRestorer, NullRestorer>();
                 }
             }
+
+            return services;
         }
     }
 }

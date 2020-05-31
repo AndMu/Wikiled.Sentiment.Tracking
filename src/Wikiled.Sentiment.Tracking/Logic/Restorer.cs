@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using CsvHelper;
 using Microsoft.Extensions.Logging;
@@ -59,7 +60,7 @@ namespace Wikiled.Sentiment.Tracking.Logic
         {
             logger.LogInformation("Loading {0}", file);
             using (var streamRead = new StreamReader(file))
-            using (var csvData = new CsvReader(streamRead))
+            using (var csvData = new CsvReader(streamRead, CultureInfo.CurrentCulture))
             {
                 csvData.Read();
                 csvData.ReadHeader();

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Wikiled.Common.Utilities.Config;
 
@@ -12,13 +14,13 @@ namespace Wikiled.Sentiment.Tracking.Logic
 
         private readonly ITrackingRegister[] register;
 
-        public TrackerFactory(ILogger<Tracker> logger, IApplicationConfiguration config, ITrackingRegister[] register)
+        public TrackerFactory(ILogger<Tracker> logger, IApplicationConfiguration config, IEnumerable<ITrackingRegister> register)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.config = config ?? throw new ArgumentNullException(nameof(config));
-            this.register = register ?? throw new ArgumentNullException(nameof(register));
+            this.register = register?.ToArray() ?? throw new ArgumentNullException(nameof(register));
 
-            if (register.Length == 0)
+            if (this.register.Length == 0)
             {
                 throw new ArgumentException("Value cannot be an empty collection.", nameof(register));
             }

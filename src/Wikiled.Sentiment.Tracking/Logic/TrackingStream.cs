@@ -6,6 +6,8 @@ namespace Wikiled.Sentiment.Tracking.Logic
 {
     public class TrackingStream : ITrackingRegister, IRatingStream
     {
+        private bool isDisposed;
+
         private readonly CompositeDisposable disposable = new CompositeDisposable();
 
         private readonly Subject<(ITracker, RatingRecord)> stream = new Subject<(ITracker, RatingRecord)>();
@@ -14,6 +16,12 @@ namespace Wikiled.Sentiment.Tracking.Logic
 
         public void Dispose()
         {
+            if (isDisposed)
+            {
+                return;
+            }
+
+            isDisposed = true;
             stream.OnCompleted();
             stream.Dispose();
             disposable.Dispose();
